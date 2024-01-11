@@ -1,0 +1,10 @@
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  function click2(){
+    console.log("I have been clicked!!")
+    socket.emit("click", "907786");
+  }
+</script>
+<button onclick="click2()">Click</button>

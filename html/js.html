@@ -1,0 +1,15 @@
+  <script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  socket.on('connect', () => {
+  socket.emit("connectbtn8");
+  const urlParams = new URLSearchParams(location.search);
+  const paramValue = urlParams.get('num');
+  console.log(paramValue);
+  socket.emit("click", paramValue);
+    // an alphanumeric id...
+ });
+
+  
+
+</script>

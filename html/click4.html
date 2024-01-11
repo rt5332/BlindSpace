@@ -1,0 +1,11 @@
+
+<script src="/socket.io/socket.io.js"></script>
+<p>907787</p>
+<script>
+  var socket = io();
+  function click2(){
+    console.log("I have been clicked!!")
+    socket.emit("click", "907787");
+  }
+</script>
+<button onclick="click2()">Click</button>
