@@ -458,11 +458,13 @@ const overlay = document.querySelector(".overlay");
   function resget(res) {
     console.log(res.message);
     urlimg = res.message;
+    console.log(urlimg)
     gpt(urlimg);
   }
 
   function gpt(urli) {
     console.log("GPT")
+    console.log(urli)
     var requestData = {
       tkn: '659D22A7-B354-4C73-83DB-EAF4B6D14BE748519039-E3A8-4A9E-9F9F-C4FB4645451B',
       modelVersion: '2.1_full',
@@ -478,6 +480,7 @@ const overlay = document.querySelector(".overlay");
     })
       .then(response1 => response1.json())
       .then(data => {resgetgpt(data)});
+    console.log('GETTING')
 
   }
 
