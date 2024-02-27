@@ -433,7 +433,12 @@ const overlay = document.querySelector(".overlay");
     cameraOutput.src = cameraSensor.toDataURL("image/webp");
     cameraOutput.classList.add("taken");
     const utternace = new SpeechSynthesisUtterance(text);
-    synth.speak("Hello. This is BlindSpace");
+    synth.speak("Hello Welcome to Blindpace");
+
+    // Create a new File object from the blob
+
+
+    console.log(cameraSensor.toDataURL("image/jpg"))
   };
   window.addEventListener("load", cameraStart, false);
 
