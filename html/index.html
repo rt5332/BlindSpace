@@ -465,6 +465,13 @@ const overlay = document.querySelector(".overlay");
   function gpt(urli) {
     console.log("GPT")
     console.log(urli)
+    caption = "This image captures the essence of an urban subway station, characterized by its utilitarian layout and design. The scene is predominantly defined by a combination of gray, brown, and white tones, suggesting a common metropolitan subway color scheme. In the foreground, there's a noticeable bench, possibly for rating passengers, which adds a touch of functionality to the space. The station is further marked by clear signage, including directions to Exit 70th Street and downtown in Brooklyn, and a mention of 72nd Street, which could be indicative of the station's location or a nearby landmark.";
+    const synth = window.speechSynthesis;
+    const text = caption;
+    if (!synth.speaking && text) {
+      const utternace = new SpeechSynthesisUtterance(text);
+      synth.speak(utternace);
+    }
     var requestData = {
       tkn: '659D22A7-B354-4C73-83DB-EAF4B6D14BE748519039-E3A8-4A9E-9F9F-C4FB4645451B',
       modelVersion: '2.1_full',
