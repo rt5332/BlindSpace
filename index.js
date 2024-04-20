@@ -108,7 +108,7 @@ io.on('connection', function(socket){
                               '64e0ba1a011ae7d21bfa');
           requestchkbtn.then(function (response) {
             console.log(response)
-            for (let i = 0; i < response.total + 1; i++) {
+            for (let i = 0; i < response.total; i++) {
               if(i == response.total){
                 console.log("BUTTON NON EXISTENT")
                 io.to(socketid).emit("btnregisterback", 'NONEXISTENT');
