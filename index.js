@@ -147,6 +147,7 @@ io.on('connection', function(socket){
       }
     }, function (error) {
     console.log(error); // Failure
+        console.log("ERROR HAS BEEN CAUGHT AND RETURNED")
     });
   })
     
