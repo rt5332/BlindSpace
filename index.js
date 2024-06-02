@@ -7,7 +7,7 @@ const path = require("path");
 
 
 
-const { Client, ID, Users, Databases } = require('node-appwrite');
+const { Client, ID, Users, Databases, Query} = require('node-appwrite');
 
 const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1') 
@@ -34,9 +34,9 @@ request.then(function (response) {
     if(response.documents[i].DeviceID == '250100646453736115000537365900144024'){
       console.log("BREAK!!")
     }
-       
+
   }
-  
+
 }, function (error) {
     console.log(error); // Failure
 });
@@ -54,9 +54,9 @@ httpserver.listen(3000);
 const users = new Object();
 io.on('connection', function(socket){
   console.log("Connected")
-  
+
   socket.on("click", function(id){
-    
+
     console.log("clicked")
     console.log(id)
     const request =
@@ -70,13 +70,13 @@ io.on('connection', function(socket){
           send(response.documents[i].DeviceID)
         }
       }
-  
+
 }, function (error) {
     console.log(error); // Failure
 });
 
-         
-    
+
+
   })
   socket.on("connectbtn8", function (){
     console.log("BTNCONNECTED")
@@ -94,65 +94,74 @@ io.on('connection', function(socket){
     console.log('socket disconnected : ' + socket.id)
   })
   socket.on('registerbutton', function (devid,btnid,socketid){
-        const request =
-      databases.listDocuments('64dcc4f69107e1632e56', 
-                              '64dcc502def4de617ae0');
-    request.then(function (response) {
-      console.log(response.documents[0].ButtonID);// Success
-      for (let i = 0; i < response.total + 1; i++) {
-        if(i == response.total){
-          console.log("BUTTON NOT REGISTERED")
-          console.log("Registering in Process")
-          console.log("registering" + devid + 'to' + btnid)
-          const requestchkbtn = databases.listDocuments('64dcc4f69107e1632e56', 
-                              '64e0ba1a011ae7d21bfa');
-          requestchkbtn.then(function (response) {
-            console.log(response)
-            for (let i = 0; i < response.total+1; i++) {
-              if(i == response.total){
-                console.log("BUTTON NON EXISTENT")
-                io.to(socketid).emit("btnregisterback", 'NONEXISTENT');
-              }
-              else{
-                if(response.documents[i].ButtonID == btnid){
-                  console.log(response.documents[i].ButtonID)
-                  console.log("BUTTON EXISTENT/REGISTER APPROVAL FINAL ...")
-                  const createreq =
-              databases.createDocument('64dcc4f69107e1632e56',   
-                               '64dcc502def4de617ae0',
-                               ID.unique(), {'DeviceID':
-                                devid.toString(), 'ButtonID':
-                                 btnid });
-    createreq.then(function (response) {
+    console.log(typeof btnid)
+    btnid = Number(btnid)
+    if (btnid == 999999){
+      var createreq2 = databases.createDocument('64dcc4f69107e1632e56',   
+         '64dcc502def4de617ae0',
+         ID.unique(), {'DeviceID':
+          devid.toString(), 'ButtonID':
+           btnid });
+      createreq2.then(function (response) {
       console.log(response);
-      io.to(socketid).emit("btnregisterback", 'DONE');// Success
-      
-    }, function (error) {
-      console.log(error); // Failure
-    });
-                  break
-                }
-              }
-            }
-          });
+      io.to(socketid).emit("btnregisterback", 'DONE');
+    })
+    }else{
+      const reqop = databases.listDocuments(
+        "64dcc4f69107e1632e56",
+        "64e0ba1a011ae7d21bfa",
+        [Query.equal('ButtonID', btnid)]
+      );
+      reqop.then(function (response) {
+        console.log(response);
+        if (response.total == 0){
+          console.log("BUTTON NON EXISTENT")
+           io.to(socketid).emit("btnregisterback", 'NONEXISTENT');
         }else{
-          if(response.documents[i].ButtonID == btnid){
-            console.log(response.documents[i].ButtonID)
-            io.to(socketid).emit("btnregisterback", 'ALREADYREGISTERED');
-            console.log(socketid)
-            console.log("BUTTON ALREADY REGISTERED")
-              break
+          console.log("BUTTON EXISTENT")
+          const reqop1 = databases.listDocuments(
+            "64dcc4f69107e1632e56",
+            "64dcc502def4de617ae0",
+            [Query.equal('ButtonID', btnid)]
+          );
+          reqop1.then(function (response) {
+            console.log(response);
+            if (response.total == 0){
+              console.log("BUTTON NOT REGISTERED")
+              console.log("REGISTERING NOW")
+              const createreq = databases.createDocument('64dcc4f69107e1632e56',   
+                 '64dcc502def4de617ae0',
+                 ID.unique(), {'DeviceID':
+                  devid.toString(), 'ButtonID':
+                   btnid });
+              createreq.then(function (response) {
+              console.log(response);
+              io.to(socketid).emit("btnregisterback", 'DONE');// Success
+
+              }, function (error) {
+              console.log(error); // Failure
+              });
+            }else{
+              console.log("BUTTON REGISTERED")
+              io.to(socketid).emit("btnregisterback", 'REGISTERED');
+            }
+          })
         }
-        }
-      }
-    }, function (error) {
-    console.log(error); // Failure
-        console.log("ERROR HAS BEEN CAUGHT AND RETURNED")
-    });
+        // io.to(socket.id).emit("optionback", response);
+      }, function (error) {
+      console.log(error);
+      });
+    }
+
+
+
+
+
+
   })
-    
-  
-  
+
+
+
   socket.on('registrationcheck', function(iddev, socketidreg){
     console.log("REGISTRATION CHECK")
     const request =
