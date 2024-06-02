@@ -25,21 +25,7 @@ const databases = new Databases(client);
 //     console.log(error); // Failure
 // });
 
-const request = databases.listDocuments('64dcc4f69107e1632e56', '64dcc502def4de617ae0');
 
-request.then(function (response) {
-  console.log(response.total)
-  console.log(response.documents[0].DeviceID);// Success
-  for (let i = 0; i < response.total; i++) {
-    if(response.documents[i].DeviceID == '250100646453736115000537365900144024'){
-      console.log("BREAK!!")
-    }
-
-  }
-
-}, function (error) {
-    console.log(error); // Failure
-});
 
 const app = express();
 const httpserver = http.Server(app);
