@@ -430,6 +430,8 @@ const overlay = document.querySelector(".overlay");
 
 
   function cam16() {
+    var audio = new Audio('Ding.mp3');
+    audio.play();
     cameraSensor.width = cameraView.videoWidth;
     cameraSensor.height = cameraView.videoHeight;
     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
